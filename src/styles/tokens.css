@@ -1,0 +1,103 @@
+/*
+ * e-Pulse — design tokens (single source of truth for the UI).
+ * `@theme static` guarantees every token is emitted as a CSS variable (base.css and JS read them too).
+ * Tailwind v4 turns every --color-*, --text-*, --radius-*, --shadow-* below
+ * into a utility (bg-brand-600, text-ink-muted, rounded-card, shadow-card …).
+ * Keep raw hex values ONLY in this file; components use the utilities.
+ */
+@theme static {
+  /* ── Typography ─────────────────────────────────────────────── */
+  --font-sans: "Inter", "Segoe UI", ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, monospace;
+
+  --text-caption: 0.75rem;          /* 12px  captions, helper text          */
+  --text-caption--line-height: 1rem;
+  --text-table: 0.8125rem;          /* 13px  table cells / status text       */
+  --text-table--line-height: 1.25rem;
+  --text-body: 0.875rem;            /* 14px  body, controls                  */
+  --text-body--line-height: 1.375rem;
+  --text-card-title: 1rem;          /* 16px  card titles                     */
+  --text-card-title--line-height: 1.5rem;
+  --text-section: 1.125rem;         /* 18px  section titles                  */
+  --text-section--line-height: 1.75rem;
+  --text-page: 1.5rem;              /* 24px  page titles                     */
+  --text-page--line-height: 2rem;
+  --text-kpi: 1.75rem;              /* 28px  KPI values                      */
+  --text-kpi--line-height: 2.25rem;
+
+  /* ── Brand (professional pharmaceutical blue) ───────────────── */
+  --color-brand-50:  #f0f7ff;
+  --color-brand-100: #e0efff;
+  --color-brand-200: #b9dcfe;
+  --color-brand-300: #7cc0fd;
+  --color-brand-400: #36a0fa;
+  --color-brand-500: #0c83eb;
+  --color-brand-600: #0066cc;       /* primary — 5.6:1 with white text       */
+  --color-brand-700: #0052a5;
+  --color-brand-800: #054687;
+  --color-brand-900: #0a3b6f;
+  --color-brand-950: #072749;
+
+  /* ── Surfaces, borders, text ────────────────────────────────── */
+  --color-canvas:         #f6f8fb;  /* app background                        */
+  --color-surface:        #ffffff;  /* cards, header, sidebar                */
+  --color-surface-muted:  #f8fafc;  /* table headers, subtle panels          */
+  --color-line:           #e2e8f0;  /* default border                        */
+  --color-line-strong:    #cbd5e1;  /* inputs, emphasised borders            */
+  --color-ink:            #0f172a;  /* primary text                          */
+  --color-ink-muted:      #475569;  /* secondary text (7.6:1 on white)       */
+  --color-ink-subtle:     #5f6f85;  /* captions (5.1:1 white, 4.8:1 canvas)  */
+
+  /* ── Status colours: SUCCESS / WARNING / ERROR / INFO / NEUTRAL ─ */
+  --color-success-50:  #ecfdf5;  --color-success-100: #d1fae5;  --color-success-200: #a7f3d0;
+  --color-success-500: #10b981;  --color-success-600: #059669;  --color-success-700: #047857;
+  --color-warning-50:  #fffbeb;  --color-warning-100: #fef3c7;  --color-warning-200: #fde68a;
+  --color-warning-500: #f59e0b;  --color-warning-600: #d97706;  --color-warning-700: #b45309;
+  --color-error-50:    #fef2f2;  --color-error-100:   #fee2e2;  --color-error-200:   #fecaca;
+  --color-error-500:   #ef4444;  --color-error-600:   #dc2626;  --color-error-700:   #b91c1c;
+  --color-info-50:     #f0f9ff;  --color-info-100:    #e0f2fe;  --color-info-200:    #bae6fd;
+  --color-info-500:    #0ea5e9;  --color-info-600:    #0284c7;  --color-info-700:    #0369a1;
+  --color-neutral-50:  #f8fafc;  --color-neutral-100: #f1f5f9;  --color-neutral-200: #e2e8f0;
+  --color-neutral-500: #64748b;  --color-neutral-600: #475569;  --color-neutral-700: #334155;
+
+  /* ── Logo accent (orange from the e-Pulse mark) ── */
+  --color-accent-400: #fb923c;
+  --color-accent-500: #f47c20;
+  --color-accent-600: #ea6a0a;
+
+  /* ── Admin console (dark sidebar for Admin / Super Admin portals) ── */
+  --color-console-950: #060f1f;
+  --color-console-900: #0a1730;
+  --color-console-800: #10213f;
+  --color-console-700: #1a2f55;
+  --color-console-line: #ffffff1f;
+  --color-super-300:   #c4b5fd;
+  --color-super-400:   #a78bfa;
+  --color-super-500:   #8b5cf6;
+  --color-super-600:   #7c3aed;
+  --color-super-700:   #6d28d9;
+  --color-super-950:   #1a0f3d;
+
+  /* ── Radius (moderate) ──────────────────────────────────────── */
+  --radius-control: 0.5rem;   /* buttons, inputs        8px  */
+  --radius-card:    0.75rem;  /* cards, tables         12px  */
+  --radius-overlay: 0.75rem;  /* modals, drawers, menus 12px */
+
+  /* ── Elevation (restrained) ─────────────────────────────────── */
+  --shadow-card:    0 1px 2px rgb(15 23 42 / 0.04), 0 1px 3px rgb(15 23 42 / 0.06);
+  --shadow-hover:   0 2px 4px rgb(15 23 42 / 0.05), 0 4px 12px rgb(15 23 42 / 0.08);
+  --shadow-popover: 0 8px 24px rgb(15 23 42 / 0.12), 0 2px 6px rgb(15 23 42 / 0.06);
+  --shadow-overlay: 0 20px 48px rgb(15 23 42 / 0.20);
+}
+
+/* Motion + layout tokens that are not Tailwind theme namespaces */
+:root {
+  --dur-fast: 120ms;
+  --dur-base: 180ms;
+  --dur-slow: 260ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  --sidebar-width: 16.5rem;      /* 264px expanded */
+  --sidebar-width-rail: 4.5rem;  /* 72px collapsed / tablet rail */
+  --header-height: 4rem;         /* 64px */
+}

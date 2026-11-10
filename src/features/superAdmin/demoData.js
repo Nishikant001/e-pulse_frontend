@@ -1,0 +1,123 @@
+/**
+ * Super Admin portal — SAMPLE DATA.
+ * Every screen in this portal other than "Admins & Users" is a design preview that renders the constants below.
+ * Nothing here is fetched, saved or sent to the backend. When an API exists for a screen, replace its import from this
+ * file with the real service and remove the <DemoNotice /> from that page.
+ */
+
+export const DASHBOARD_KPIS = {
+  admins: { value: 12, active: 11, trend: "+2", comparison: "vs last quarter" },
+  distributors: { value: 148, active: 131, trend: "+9.6%", comparison: "vs last month" },
+  retailers: { value: 9420, trend: "+4.1%", comparison: "across the network" },
+  mrr: { value: 1860000, trend: "+7.3%", comparison: "monthly recurring revenue" },
+};
+
+export const ONBOARDING_BY_MONTH = [
+  { label: "May", added: 8, churned: 1 },
+  { label: "Jun", added: 11, churned: 2 },
+  { label: "Jul", added: 9, churned: 0 },
+  { label: "Aug", added: 14, churned: 3 },
+  { label: "Sep", added: 12, churned: 1 },
+  { label: "Oct", added: 16, churned: 2 },
+];
+
+export const PLAN_MIX = [
+  { name: "Starter", count: 52 },
+  { name: "Growth", count: 71 },
+  { name: "Enterprise", count: 25 },
+];
+
+export const SYSTEM_HEALTH = [
+  { id: "api", name: "Core API", detail: "Median response 142 ms", status: "Operational" },
+  { id: "db", name: "Database", detail: "Replica lag 0.4 s", status: "Operational" },
+  { id: "sap", name: "SAP sync", detail: "Last run 12 minutes ago", status: "Degraded" },
+  { id: "mail", name: "Email delivery", detail: "98.7% delivered today", status: "Operational" },
+  { id: "jobs", name: "Background jobs", detail: "3 queued · 0 failed", status: "Operational" },
+];
+
+export const RECENT_ACTIVITY = [
+  { id: 1, title: "Distributor approved", detail: "Shree Balaji Pharma Distributors · approved by Neha Kapoor", at: "2026-10-17T09:12:00+05:30", tone: "success" },
+  { id: 2, title: "Admin account created", detail: "Rahul Mehta (Finance Admin)", at: "2026-10-17T08:40:00+05:30", tone: "info" },
+  { id: 3, title: "Plan upgraded", detail: "Om Sai Medico · Growth → Enterprise", at: "2026-10-16T17:25:00+05:30", tone: "brand" },
+  { id: 4, title: "Failed sign-in attempts", detail: "5 attempts for admin@kiranpharma.example from 203.0.113.24", at: "2026-10-16T14:02:00+05:30", tone: "warning" },
+  { id: 5, title: "Distributor suspended", detail: "Vardhman Healthcare · overdue subscription invoice", at: "2026-10-15T11:48:00+05:30", tone: "error" },
+  { id: 6, title: "Announcement published", detail: "Scheduled maintenance on 25 Oct, 01:00–03:00 IST", at: "2026-10-15T10:05:00+05:30", tone: "info" },
+];
+
+export const ROLES = [
+  { id: "super_admin", name: "Super Admin", description: "Full control of the platform, billing and every admin account.", users: 2, system: true },
+  { id: "admin", name: "Admin", description: "Onboards and manages distributors, masters and company-level reports.", users: 6, system: true },
+  { id: "finance_admin", name: "Finance Admin", description: "Accounts, outstanding, credit limits and subscription billing.", users: 2, system: false },
+  { id: "support", name: "Support Analyst", description: "Read-only access to distributors and orders to resolve tickets.", users: 1, system: false },
+  { id: "auditor", name: "Auditor", description: "Read-only access to audit logs and financial reports.", users: 1, system: false },
+];
+
+export const PERMISSION_MODULES = ["Distributors", "Product & pricing masters", "Sales & invoices", "Inventory", "Accounts", "Claims & schemes", "Audit logs", "Platform settings"];
+// access level per role per module: "full" | "edit" | "view" | "none"
+export const ROLE_ACCESS = {
+  super_admin: ["full", "full", "full", "full", "full", "full", "full", "full"],
+  admin: ["full", "full", "edit", "view", "view", "full", "none", "none"],
+  finance_admin: ["view", "none", "view", "none", "full", "view", "none", "none"],
+  support: ["view", "view", "view", "view", "none", "none", "none", "none"],
+  auditor: ["view", "view", "view", "view", "view", "view", "view", "none"],
+};
+
+export const DISTRIBUTORS = [
+  { id: 1, code: "DST-0001", name: "Shree Balaji Pharma Distributors", city: "Indore", state: "Madhya Pradesh", owner: "Neha Kapoor", plan: "Enterprise", retailers: 412, status: "active", onboardedAt: "2025-11-04", lastActiveAt: "2026-10-17T09:30:00+05:30" },
+  { id: 2, code: "DST-0002", name: "Om Sai Medico", city: "Pune", state: "Maharashtra", owner: "Rahul Mehta", plan: "Enterprise", retailers: 368, status: "active", onboardedAt: "2025-12-12", lastActiveAt: "2026-10-17T08:55:00+05:30" },
+  { id: 3, code: "DST-0003", name: "Kiran Pharma Agencies", city: "Nagpur", state: "Maharashtra", owner: "Neha Kapoor", plan: "Growth", retailers: 214, status: "active", onboardedAt: "2026-01-18", lastActiveAt: "2026-10-16T19:10:00+05:30" },
+  { id: 4, code: "DST-0004", name: "Vardhman Healthcare", city: "Jaipur", state: "Rajasthan", owner: "Amit Joshi", plan: "Growth", retailers: 187, status: "inactive", onboardedAt: "2026-02-02", lastActiveAt: "2026-10-01T12:00:00+05:30" },
+  { id: 5, code: "DST-0005", name: "Lifeline Drug House", city: "Surat", state: "Gujarat", owner: "Amit Joshi", plan: "Starter", retailers: 96, status: "active", onboardedAt: "2026-03-09", lastActiveAt: "2026-10-16T16:42:00+05:30" },
+  { id: 6, code: "DST-0006", name: "Ganesh Medical Stores", city: "Nashik", state: "Maharashtra", owner: "Rahul Mehta", plan: "Starter", retailers: 74, status: "pending", onboardedAt: "2026-10-12", lastActiveAt: null },
+  { id: 7, code: "DST-0007", name: "Annapurna Pharma Traders", city: "Bhopal", state: "Madhya Pradesh", owner: "Neha Kapoor", plan: "Growth", retailers: 158, status: "active", onboardedAt: "2026-04-21", lastActiveAt: "2026-10-17T07:48:00+05:30" },
+  { id: 8, code: "DST-0008", name: "Sanjivani Distributors", city: "Lucknow", state: "Uttar Pradesh", owner: "Amit Joshi", plan: "Growth", retailers: 203, status: "active", onboardedAt: "2026-05-30", lastActiveAt: "2026-10-16T21:15:00+05:30" },
+];
+
+export const ONBOARDING_REQUESTS = [
+  { id: 101, business: "Ganesh Medical Stores", contact: "Prakash Deshmukh", email: "prakash@ganeshmedical.example", city: "Nashik", gstin: "27AAAPD1234F1Z5", licence: "MH-NSK-20-118842", submittedAt: "2026-10-12", status: "Under review" },
+  { id: 102, business: "Sri Venkateswara Pharma", contact: "Lakshmi Narayan", email: "lakshmi@svpharma.example", city: "Hyderabad", gstin: "36AABCS5678K1Z2", licence: "TS-HYD-21-004417", submittedAt: "2026-10-14", status: "Pending" },
+  { id: 103, business: "Mahalaxmi Drug Agencies", contact: "Sunil Patil", email: "sunil@mahalaxmidrugs.example", city: "Kolhapur", gstin: "27AAECM9012L1Z8", licence: "MH-KOP-19-072209", submittedAt: "2026-10-15", status: "Pending" },
+  { id: 104, business: "Harmony Health Supplies", contact: "Farah Sheikh", email: "farah@harmonyhealth.example", city: "Ahmedabad", gstin: "24AAGCH3456M1Z1", licence: "GJ-AHD-22-310056", submittedAt: "2026-10-09", status: "Approved" },
+  { id: 105, business: "Ravi Surgicals", contact: "Ravi Teja", email: "ravi@ravisurgicals.example", city: "Vijayawada", gstin: "37AAJFR7890P1Z6", licence: "AP-VJA-18-009931", submittedAt: "2026-10-05", status: "Rejected" },
+];
+
+export const PLANS = [
+  { id: "starter", name: "Starter", price: 4999, blurb: "For single-warehouse distributors getting started.", distributors: 52, features: ["Up to 100 retailers", "2 users", "Core sales, purchase and inventory", "Email support"] },
+  { id: "growth", name: "Growth", price: 12999, blurb: "For growing distributors with a field team.", distributors: 71, popular: true, features: ["Up to 500 retailers", "10 users", "Schemes, claims and accounts", "Priority support"] },
+  { id: "enterprise", name: "Enterprise", price: 29999, blurb: "For large networks with ERP integration.", distributors: 25, features: ["Unlimited retailers", "Unlimited users", "SAP integration and audit logs", "Dedicated success manager"] },
+];
+
+export const SUBSCRIPTION_INVOICES = [
+  { id: "SUB-2610-014", distributor: "Shree Balaji Pharma Distributors", plan: "Enterprise", amount: 29999, issuedAt: "2026-10-01", dueAt: "2026-10-15", status: "Paid" },
+  { id: "SUB-2610-015", distributor: "Om Sai Medico", plan: "Enterprise", amount: 29999, issuedAt: "2026-10-01", dueAt: "2026-10-15", status: "Paid" },
+  { id: "SUB-2610-016", distributor: "Kiran Pharma Agencies", plan: "Growth", amount: 12999, issuedAt: "2026-10-01", dueAt: "2026-10-15", status: "Paid" },
+  { id: "SUB-2610-017", distributor: "Vardhman Healthcare", plan: "Growth", amount: 12999, issuedAt: "2026-10-01", dueAt: "2026-10-15", status: "Overdue" },
+  { id: "SUB-2610-018", distributor: "Lifeline Drug House", plan: "Starter", amount: 4999, issuedAt: "2026-10-01", dueAt: "2026-10-15", status: "Paid" },
+  { id: "SUB-2610-019", distributor: "Annapurna Pharma Traders", plan: "Growth", amount: 12999, issuedAt: "2026-10-10", dueAt: "2026-10-24", status: "Due" },
+  { id: "SUB-2610-020", distributor: "Sanjivani Distributors", plan: "Growth", amount: 12999, issuedAt: "2026-10-10", dueAt: "2026-10-24", status: "Due" },
+];
+
+export const AUDIT_LOGS = [
+  { id: 1, at: "2026-10-17T09:12:41+05:30", actor: "Neha Kapoor", role: "Admin", action: "Approved distributor", target: "Shree Balaji Pharma Distributors", module: "Distributors", ip: "103.21.58.14", outcome: "Success" },
+  { id: 2, at: "2026-10-17T08:40:03+05:30", actor: "Super Admin", role: "Super Admin", action: "Created admin account", target: "Rahul Mehta", module: "Admins", ip: "103.21.58.2", outcome: "Success" },
+  { id: 3, at: "2026-10-16T17:25:19+05:30", actor: "Rahul Mehta", role: "Finance Admin", action: "Changed plan", target: "Om Sai Medico", module: "Billing", ip: "49.36.201.77", outcome: "Success" },
+  { id: 4, at: "2026-10-16T14:02:55+05:30", actor: "admin@kiranpharma.example", role: "Admin", action: "Sign-in", target: "—", module: "Authentication", ip: "203.0.113.24", outcome: "Failed" },
+  { id: 5, at: "2026-10-16T11:30:08+05:30", actor: "Amit Joshi", role: "Admin", action: "Updated product price", target: "Paracetamol 500 mg", module: "Masters", ip: "49.36.201.80", outcome: "Success" },
+  { id: 6, at: "2026-10-15T11:48:30+05:30", actor: "Super Admin", role: "Super Admin", action: "Suspended distributor", target: "Vardhman Healthcare", module: "Distributors", ip: "103.21.58.2", outcome: "Success" },
+  { id: 7, at: "2026-10-15T10:05:12+05:30", actor: "Super Admin", role: "Super Admin", action: "Published announcement", target: "Scheduled maintenance", module: "Announcements", ip: "103.21.58.2", outcome: "Success" },
+  { id: 8, at: "2026-10-14T16:44:47+05:30", actor: "Neha Kapoor", role: "Admin", action: "Exported distributor list", target: "148 records", module: "Distributors", ip: "103.21.58.14", outcome: "Success" },
+  { id: 9, at: "2026-10-14T09:18:22+05:30", actor: "Auditor", role: "Auditor", action: "Opened audit log", target: "—", module: "Audit logs", ip: "152.58.12.9", outcome: "Denied" },
+];
+
+export const ANNOUNCEMENTS = [
+  { id: 1, title: "Scheduled maintenance — 25 Oct, 01:00–03:00 IST", audience: "All distributors", channel: "Banner + email", publishedAt: "2026-10-15", status: "Published" },
+  { id: 2, title: "New: Batch-wise FEFO allocation on sales deliveries", audience: "Growth and Enterprise", channel: "Banner", publishedAt: "2026-10-08", status: "Published" },
+  { id: 3, title: "GST e-invoice reminder for the October filing", audience: "All distributors", channel: "Email", publishedAt: null, status: "Scheduled" },
+  { id: 4, title: "Festive season support hours", audience: "All admins", channel: "Banner", publishedAt: null, status: "Draft" },
+];
+
+export const SETTINGS_DEFAULTS = {
+  general: { platformName: "e-Pulse", supportEmail: "support@epulse.example", timezone: "Asia/Kolkata", currency: "INR" },
+  security: { sessionMinutes: 60, requireTwoFactor: true, passwordMinLength: 12, lockAfterFailures: 5 },
+  notifications: { emailDigest: true, failedLoginAlerts: true, overdueInvoiceAlerts: true, sapSyncAlerts: false },
+};

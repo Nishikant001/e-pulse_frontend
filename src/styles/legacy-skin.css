@@ -1,0 +1,183 @@
+/*
+ * Legacy page skin — makes the original Distributor screens (written before the design system) look and align like the
+ * Admin screens WITHOUT touching their code. It is scoped to `.dms-legacy` (AppShell adds it to the Distributor portal's
+ * content area) and only targets the old Tailwind utility patterns those pages use; design-system components use tokens
+ * and are unaffected. Delete a rule once the page it serves has been migrated to the design system.
+ * (Unlayered CSS beats Tailwind's layered utilities, so these rules intentionally win inside the scope.)
+ */
+
+/* ── 1. Page frame: same left edge, width and background as Admin pages ───────────── */
+.dms-legacy .dms-page-enter > div.min-h-screen,
+.dms-legacy .dms-page-enter > div.p-6,
+.dms-legacy .dms-page-enter > div.max-w-7xl {
+  min-height: 0;
+  padding: 0;
+  background: none;
+  max-width: none;
+  margin: 0;
+}
+.dms-legacy .dms-page-enter > div > div.max-w-7xl,
+.dms-legacy .dms-page-enter > div > div.max-w-6xl,
+.dms-legacy .dms-page-enter > div > div.max-w-5xl,
+.dms-legacy .dms-page-enter > div > div.max-w-4xl,
+.dms-legacy .dms-page-enter > div > div.max-w-3xl {
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: 0;
+}
+.dms-legacy .dms-page-enter > div > div.max-w-7xl.p-6 { padding: 0; }
+
+/* ── 2. Cards & elevation ─────────────────────────────────────────────────────────── */
+.dms-legacy .bg-white.rounded-lg,
+.dms-legacy .bg-white.rounded-xl,
+.dms-legacy .bg-white.rounded-2xl,
+.dms-legacy .bg-white.rounded-md {
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
+}
+.dms-legacy .shadow-sm, .dms-legacy .shadow, .dms-legacy .shadow-md,
+.dms-legacy .shadow-lg, .dms-legacy .shadow-xl, .dms-legacy .shadow-2xl { box-shadow: var(--shadow-card); }
+.dms-legacy .fixed .shadow-sm, .dms-legacy .fixed .shadow-md, .dms-legacy .fixed .shadow-lg,
+.dms-legacy .fixed .shadow-xl, .dms-legacy .fixed .shadow-2xl, .dms-legacy .fixed.shadow-lg { box-shadow: var(--shadow-overlay); }
+/* modal panels */
+.dms-legacy .fixed.inset-0 > .bg-white,
+.dms-legacy .fixed.inset-0 > div > .bg-white { border-radius: var(--radius-overlay); border: 0; }
+.dms-legacy .fixed.inset-0 { backdrop-filter: blur(2px); }
+
+/* ── 3. Gradients → calm, on-brand ────────────────────────────────────────────────── */
+/* soft tinted washes (from-*-50/100) → plain surface */
+.dms-legacy [class*="bg-gradient-to-"][class*="from-"][class*="-50"]:not([class*="-500"]),
+.dms-legacy [class*="bg-gradient-to-"][class*="from-"][class*="-100"] { background-image: none; background-color: var(--color-surface-muted); }
+/* saturated banners / stat cards → one brand gradient (green/red/amber semantic cards keep their hue) */
+.dms-legacy [class*="bg-gradient-to-"][class*="from-blue-"][class*="-600"],
+.dms-legacy [class*="bg-gradient-to-"][class*="from-blue-"][class*="-500"],
+.dms-legacy [class*="bg-gradient-to-"][class*="from-indigo-"][class*="-600"],
+.dms-legacy [class*="bg-gradient-to-"][class*="from-purple-"][class*="-600"],
+.dms-legacy [class*="bg-gradient-to-"][class*="from-purple-"][class*="-500"],
+.dms-legacy [class*="bg-gradient-to-"][class*="from-pink-"][class*="-500"] { background-image: linear-gradient(135deg, var(--color-brand-600), var(--color-brand-800)); }
+.dms-legacy .min-h-screen[class*="bg-gradient-to-"] { min-height: 0; background: none; }
+
+/* page-level header banners (full-width coloured bands) become a rounded header card */
+.dms-legacy .dms-page-enter > div > div[class*="bg-gradient-to-r"][class*="shadow-xl"] {
+  border-radius: var(--radius-card);
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+/* ── 4. Titles ────────────────────────────────────────────────────────────────────── */
+.dms-legacy h1, .dms-legacy h1.text-3xl, .dms-legacy h1.text-4xl,
+.dms-legacy h2.text-2xl, .dms-legacy h2.text-3xl, .dms-legacy .text-4xl.font-bold, .dms-legacy .text-3xl.font-bold {
+  font-size: var(--text-page);
+  line-height: var(--text-page--line-height);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.dms-legacy h1[class*="text-"]:not(.text-white), .dms-legacy h2.text-2xl:not(.text-white) { color: var(--color-ink); }
+.dms-legacy h1 > svg, .dms-legacy h2.text-2xl > svg { color: var(--color-brand-600); }
+.dms-legacy h2.text-xl, .dms-legacy h2.text-lg, .dms-legacy h3.text-xl, .dms-legacy h3.text-lg {
+  font-size: var(--text-section);
+  line-height: var(--text-section--line-height);
+  font-weight: 600;
+}
+.dms-legacy .text-gray-800, .dms-legacy .text-gray-900, .dms-legacy .text-slate-800, .dms-legacy .text-slate-900 { color: var(--color-ink); }
+.dms-legacy .text-gray-600, .dms-legacy .text-gray-500, .dms-legacy .text-slate-600, .dms-legacy .text-slate-500 { color: var(--color-ink-muted); }
+
+/* ── 5. Tables ────────────────────────────────────────────────────────────────────── */
+.dms-legacy table { border-collapse: separate; border-spacing: 0; width: 100%; }
+.dms-legacy thead, .dms-legacy thead tr, .dms-legacy thead[class*="bg-"], .dms-legacy thead tr[class*="bg-"] {
+  background: var(--color-surface-muted);
+  background-image: none;
+}
+.dms-legacy th {
+  font-size: var(--text-caption);
+  line-height: var(--text-caption--line-height);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-ink-muted);
+  white-space: nowrap;
+  border-bottom: 1px solid var(--color-line);
+  padding-block: 0.75rem;
+}
+.dms-legacy td {
+  font-size: var(--text-table);
+  line-height: var(--text-table--line-height);
+  border-bottom: 1px solid var(--color-line);
+  padding-block: 0.75rem;
+}
+.dms-legacy tbody tr:last-child td { border-bottom: 0; }
+.dms-legacy tbody tr { transition: background-color var(--dur-fast) var(--ease-standard); }
+.dms-legacy tbody tr:hover { background: var(--color-brand-50); }
+.dms-legacy .divide-y > :not(:last-child), .dms-legacy .divide-gray-200 > :not(:last-child) { border-color: var(--color-line); }
+.dms-legacy .overflow-x-auto { scrollbar-width: thin; scrollbar-color: var(--color-line-strong) transparent; }
+
+/* ── 6. Buttons ───────────────────────────────────────────────────────────────────── */
+.dms-legacy button.rounded-lg, .dms-legacy button.rounded-xl, .dms-legacy button.rounded, .dms-legacy button.rounded-md,
+.dms-legacy a.rounded-lg[class*="bg-"], .dms-legacy a.rounded-xl[class*="bg-"] { border-radius: var(--radius-control); }
+.dms-legacy button[class*="bg-blue-6"], .dms-legacy button[class*="bg-indigo-6"], .dms-legacy button[class*="bg-purple-6"], .dms-legacy button[class*="bg-pink-6"] {
+  background-image: none;
+  background-color: var(--color-brand-600);
+  font-weight: 500;
+  transition: background-color var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard);
+}
+.dms-legacy button[class*="bg-blue-6"]:hover, .dms-legacy button[class*="bg-indigo-6"]:hover, .dms-legacy button[class*="bg-purple-6"]:hover { background-color: var(--color-brand-700); }
+.dms-legacy button[class*="bg-gradient-to-"][class*="from-"][class*="to-"]:not([class*="from-green"]):not([class*="from-red"]):not([class*="from-amber"]):not([class*="from-orange"]) {
+  background-image: none; background-color: var(--color-brand-600);
+}
+.dms-legacy button:active:not(:disabled) { transform: translateY(0.5px); }
+.dms-legacy button:disabled { opacity: 0.55; cursor: not-allowed; }
+.dms-legacy .transform.hover\:scale-105:hover { transform: none; }
+
+/* ── 7. Form controls ─────────────────────────────────────────────────────────────── */
+.dms-legacy input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]),
+.dms-legacy select, .dms-legacy textarea {
+  border-color: var(--color-line-strong);
+  border-radius: var(--radius-control);
+  color: var(--color-ink);
+  transition: border-color var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard);
+}
+.dms-legacy input:not([type="checkbox"]):not([type="radio"]):focus, .dms-legacy select:focus, .dms-legacy textarea:focus {
+  outline: none;
+  border-color: var(--color-brand-500);
+  box-shadow: 0 0 0 3px rgb(12 131 235 / 0.18);
+}
+.dms-legacy input::placeholder, .dms-legacy textarea::placeholder { color: var(--color-ink-subtle); }
+.dms-legacy label.block, .dms-legacy label.text-sm { color: var(--color-ink-muted); font-weight: 500; }
+
+/* ── 8. Badges / pills ────────────────────────────────────────────────────────────── */
+.dms-legacy span.rounded-full[class*="bg-"][class*="text-"] { font-weight: 500; }
+
+/* ── 9. Motion: soft entrance for cards ───────────────────────────────────────────── */
+@media (prefers-reduced-motion: no-preference) {
+  .dms-legacy .dms-page-enter > div > div > .bg-white,
+  .dms-legacy .dms-page-enter > div > .bg-white { animation: dms-pop-in var(--dur-slow) var(--ease-standard) both; }
+}
+
+/* ── 10. Small screens ────────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .dms-legacy .dms-page-enter .grid.grid-cols-2:not(.keep-cols), .dms-legacy .dms-page-enter .md\:grid-cols-2 { gap: 0.75rem; }
+  .dms-legacy .dms-page-enter .flex.justify-between.items-center { flex-wrap: wrap; gap: 0.75rem; }
+}
+
+/* ── 11. Stat tiles: the saturated gradient tiles become the same calm white tiles as the Admin KPI cards ── */
+.dms-legacy [class*="bg-gradient-to-br"].text-white {
+  background-image: none !important;
+  background-color: var(--color-surface) !important;
+  border: 1px solid var(--color-line);
+  color: var(--color-ink);
+  border-radius: var(--radius-card);
+  transition: box-shadow var(--dur-base) var(--ease-standard), transform var(--dur-base) var(--ease-standard);
+}
+.dms-legacy [class*="bg-gradient-to-br"].text-white:hover { box-shadow: var(--shadow-hover); transform: translateY(-1px); }
+.dms-legacy [class*="bg-gradient-to-br"].text-white .text-white,
+.dms-legacy [class*="bg-gradient-to-br"].text-white [class*="text-blue-1"], .dms-legacy [class*="bg-gradient-to-br"].text-white [class*="text-green-1"],
+.dms-legacy [class*="bg-gradient-to-br"].text-white [class*="text-purple-1"], .dms-legacy [class*="bg-gradient-to-br"].text-white [class*="text-pink-1"],
+.dms-legacy [class*="bg-gradient-to-br"].text-white [class*="text-indigo-1"] { color: var(--color-ink-muted); }
+.dms-legacy [class*="bg-gradient-to-br"].text-white .font-bold, .dms-legacy [class*="bg-gradient-to-br"].text-white .text-3xl { color: var(--color-ink); }
+.dms-legacy [class*="bg-gradient-to-br"].text-white svg { color: var(--color-brand-600); opacity: 0.9; }
+
+/* ── 12. Default border colour: Tailwind v4 borders without an explicit colour class are black (currentColor).
+ *  In the base layer so any explicit border-<colour> utility still wins. ── */
+@layer base {
+  .dms-legacy *, .dms-legacy *::before, .dms-legacy *::after { border-color: var(--color-line); }
+}

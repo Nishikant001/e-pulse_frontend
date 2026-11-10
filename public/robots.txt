@@ -1,0 +1,9 @@
+# Source copy; the build regenerates this file (scripts/prerender.mjs) and adds the Sitemap line when VITE_SITE_URL is set.
+User-agent: *
+Disallow: /dashboard
+Disallow: /admin
+Disallow: /login
+Disallow: /signup
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /api/

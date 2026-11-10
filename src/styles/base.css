@@ -1,0 +1,71 @@
+/* Base styles, focus treatment and motion primitives for the design system. */
+
+body {
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Visible keyboard focus everywhere (mouse clicks do not show it). */
+:focus-visible {
+  outline: 2px solid var(--color-brand-500);
+  outline-offset: 2px;
+}
+
+/* Thin, unobtrusive scrollbars for panels and tables. */
+.dms-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line-strong) transparent;
+}
+.dms-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+.dms-scroll::-webkit-scrollbar-thumb { background: var(--color-line-strong); border-radius: 9999px; }
+.dms-scroll::-webkit-scrollbar-track { background: transparent; }
+
+/* ── Motion primitives ─────────────────────────────────────────
+ * Opacity-only for page entrance: transforms on an ancestor would break
+ * position:fixed modals inside legacy pages. */
+@keyframes dms-fade-in   { from { opacity: 0; } to { opacity: 1; } }
+@keyframes dms-pop-in    { from { opacity: 0; transform: translateY(6px) scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes dms-slide-right { from { transform: translateX(100%); } to { transform: none; } }
+@keyframes dms-slide-left  { from { transform: translateX(-100%); } to { transform: none; } }
+@keyframes dms-toast-in  { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: none; } }
+@keyframes dms-shimmer   { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+.dms-page-enter   { animation: dms-fade-in var(--dur-base) var(--ease-standard) both; }
+.dms-fade-in      { animation: dms-fade-in var(--dur-fast) var(--ease-standard) both; }
+.dms-pop-in       { animation: dms-pop-in var(--dur-base) var(--ease-standard) both; }
+.dms-slide-right  { animation: dms-slide-right var(--dur-slow) var(--ease-standard) both; }
+.dms-slide-left   { animation: dms-slide-left var(--dur-slow) var(--ease-standard) both; }
+.dms-toast-in     { animation: dms-toast-in var(--dur-base) var(--ease-standard) both; }
+
+.dms-skeleton {
+  background: linear-gradient(90deg, var(--color-neutral-100) 25%, var(--color-neutral-200) 37%, var(--color-neutral-100) 63%);
+  background-size: 400% 100%;
+  animation: dms-shimmer 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dms-page-enter, .dms-fade-in, .dms-pop-in, .dms-slide-right, .dms-slide-left, .dms-toast-in {
+    animation: none;
+  }
+  .dms-skeleton { animation: none; }
+  * { scroll-behavior: auto !important; }
+}
+
+/* ── Print: when an invoice is printed (Sales Invoices → Print) only the invoice document is output. ── */
+@media print {
+  body > *:not(:has(#invoice-print)) { display: none !important; }
+  body > * { position: static !important; }
+  body > * > [aria-hidden="true"] { display: none !important; }
+  [role="dialog"]:has(#invoice-print) {
+    position: static !important; display: block !important; width: 100% !important; max-width: none !important; height: auto !important;
+    max-height: none !important; overflow: visible !important; box-shadow: none !important; border: 0 !important; animation: none !important;
+  }
+  [role="dialog"]:has(#invoice-print) > *:not(:has(#invoice-print)) { display: none !important; }
+  [role="dialog"]:has(#invoice-print) > * { overflow: visible !important; max-height: none !important; padding: 0 !important; }
+  #invoice-print { font-size: 11px; color: #000; }
+  #invoice-print .print-hide { display: none !important; }
+  #invoice-print table { break-inside: auto; }
+  #invoice-print tr { break-inside: avoid; }
+}

@@ -1,0 +1,26 @@
+/*
+ * Legacy palette bridge.
+ *
+ * Existing (not yet migrated) pages were written with Tailwind's indigo and
+ * purple utilities (~130 usages). Re-pointing those two scales at the brand
+ * blue makes every legacy screen inherit the new brand colour without
+ * touching page code. REMOVE this file once all pages use the design system
+ * (see docs/PHARMA_DMS_UI_UX_FOUNDATION.md, "Components still requiring redesign").
+ */
+@theme {
+  --color-indigo-50:  #f0f7ff;  --color-indigo-100: #e0efff;  --color-indigo-200: #b9dcfe;
+  --color-indigo-300: #7cc0fd;  --color-indigo-400: #36a0fa;  --color-indigo-500: #0c83eb;
+  --color-indigo-600: #0066cc;  --color-indigo-700: #0052a5;  --color-indigo-800: #054687;
+  --color-indigo-900: #0a3b6f;
+
+  --color-purple-50:  #f0f7ff;  --color-purple-100: #e0efff;  --color-purple-200: #b9dcfe;
+  --color-purple-300: #7cc0fd;  --color-purple-400: #36a0fa;  --color-purple-500: #0c83eb;
+  --color-purple-600: #0066cc;  --color-purple-700: #0052a5;  --color-purple-800: #054687;
+  --color-purple-900: #0a3b6f;
+
+  /* Also fold blue / pink / violet / fuchsia into the brand scale: legacy pages used a rainbow of them. */
+  --color-blue-50: #f0f7ff;  --color-blue-100: #e0efff;  --color-blue-200: #b9dcfe;  --color-blue-300: #7cc0fd;  --color-blue-400: #36a0fa;  --color-blue-500: #0c83eb;  --color-blue-600: #0066cc;  --color-blue-700: #0052a5;  --color-blue-800: #054687;  --color-blue-900: #0a3b6f;
+  --color-pink-50: #f0f7ff;  --color-pink-100: #e0efff;  --color-pink-200: #b9dcfe;  --color-pink-300: #7cc0fd;  --color-pink-400: #36a0fa;  --color-pink-500: #0c83eb;  --color-pink-600: #0066cc;  --color-pink-700: #0052a5;  --color-pink-800: #054687;  --color-pink-900: #0a3b6f;
+  --color-violet-50: #f0f7ff;  --color-violet-100: #e0efff;  --color-violet-200: #b9dcfe;  --color-violet-300: #7cc0fd;  --color-violet-400: #36a0fa;  --color-violet-500: #0c83eb;  --color-violet-600: #0066cc;  --color-violet-700: #0052a5;  --color-violet-800: #054687;  --color-violet-900: #0a3b6f;
+  --color-fuchsia-50: #f0f7ff;  --color-fuchsia-100: #e0efff;  --color-fuchsia-200: #b9dcfe;  --color-fuchsia-300: #7cc0fd;  --color-fuchsia-400: #36a0fa;  --color-fuchsia-500: #0c83eb;  --color-fuchsia-600: #0066cc;  --color-fuchsia-700: #0052a5;  --color-fuchsia-800: #054687;  --color-fuchsia-900: #0a3b6f;
+}

@@ -1,0 +1,120 @@
+/*
+ * e-Pulse — public website THEME LAYER (matches the new Admin / Distributor sign-in pages).
+ * Loaded AFTER public.css (see PublicLayout.jsx). It only re-skins; layout, content, SEO and animations stay as they are.
+ * Look: deep brand-blue gradient surfaces with soft white circles, light sticky header, solid brand-600 buttons,
+ * 12–16px rounded white cards, no teal. All colours come from src/styles/tokens.css (--color-brand-*, --color-ink-*, --color-line).
+ */
+
+/* ───────────── 1. Palette remap (public.css reads these variables everywhere) ───────────── */
+.pub-root {
+  --navy-950: var(--color-brand-950);
+  --navy-900: var(--color-brand-900);
+  --navy-800: var(--color-brand-800);
+  --navy-700: var(--color-brand-700);
+  --teal-300: var(--color-brand-300);
+  --teal-400: var(--color-brand-400);
+  --teal-500: var(--color-brand-500);
+  --on-dark: rgb(255 255 255 / 0.82);
+  --on-dark-dim: rgb(255 255 255 / 0.62);
+  --pub-grad: linear-gradient(135deg, var(--color-brand-950) 0%, var(--color-brand-800) 55%, var(--color-brand-600) 100%);
+  --pub-r-lg: 1rem;
+  --pub-r-md: 0.75rem;
+  --pub-r-ctl: 0.625rem;
+  background: var(--color-surface);
+}
+
+/* ───────────── 2. Brand mark = same rounded gradient tile as the sign-in pages ───────────── */
+.pub-brand-mark { display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border-radius: var(--radius-control); color: #fff; background: linear-gradient(135deg, var(--color-brand-500), var(--color-brand-700)); box-shadow: var(--shadow-card); flex: none; }
+.pub-brand-invert .pub-brand-mark { box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.25); }
+.pub-brand:hover .pub-brand-mark { transform: rotate(-8deg) scale(1.05); }
+.pub-brand-name { font-weight: 650; letter-spacing: -0.02em; }
+
+/* ───────────── 3. Header: light, clean, sticky ───────────── */
+.pub-header { background: rgb(255 255 255 / 0.92); border-bottom: 1px solid var(--color-line); }
+.pub-header[data-scrolled="true"] { background: rgb(255 255 255 / 0.97); box-shadow: 0 6px 24px rgb(15 23 42 / 0.08); }
+.pub-header .pub-brand-invert { color: var(--color-ink); }
+.pub-header :focus-visible { outline-color: var(--color-brand-500); }
+.pub-navlink { color: var(--color-ink-muted); border-radius: var(--pub-r-ctl); }
+.pub-navlink:hover { color: var(--color-brand-700); background: var(--color-brand-50); }
+.pub-navlink.is-active { color: var(--color-brand-700); background: var(--color-brand-50); }
+.pub-navlink.is-active::after { background: var(--color-brand-600); left: 0.9rem; right: 0.9rem; }
+.pub-signin { color: var(--color-ink-muted); }
+.pub-signin:hover { color: var(--color-brand-700); }
+.pub-burger { border-color: var(--color-line-strong); background: #fff; border-radius: var(--pub-r-ctl); }
+.pub-burger span { background: var(--color-ink); }
+.pub-mmenu { background: #fff; }
+.pub-mlink { color: var(--color-ink); border-top-color: var(--color-line); }
+.pub-mlink.is-active { color: var(--color-brand-700); }
+.pub-mmenu-cta { border-top-color: var(--color-line); }
+.pub-mmenu .pub-btn-ghost { color: var(--color-brand-700); background: var(--color-brand-50); border-color: var(--color-brand-100); -webkit-backdrop-filter: none; backdrop-filter: none; }
+.pub-mmenu .pub-btn-ghost:hover { background: var(--color-brand-100); }
+
+/* ───────────── 4. Buttons: solid brand, 10px radius (same family as the sign-in button) ───────────── */
+.pub-btn { border-radius: var(--pub-r-ctl); }
+.pub-btn-primary { background-image: none; background-color: var(--color-brand-600); box-shadow: var(--shadow-card); }
+.pub-btn-primary:hover { background-color: var(--color-brand-700); box-shadow: 0 8px 20px rgb(0 82 165 / 0.28); }
+.pub-btn-primary:active { background-color: var(--color-brand-800); }
+.pub-btn-secondary { border-color: var(--color-line-strong); }
+.pub-btn-secondary:hover { border-color: var(--color-brand-300); background: var(--color-brand-50); }
+/* on dark gradient surfaces the primary button turns white so it never melts into the blue */
+.pub-hero .pub-btn-primary, .pub-cta .pub-btn-primary, .pub-dark .pub-btn-primary, .pub-footer .pub-btn-primary { background-color: #fff; color: var(--color-brand-800); box-shadow: 0 8px 22px rgb(2 8 24 / 0.25); }
+.pub-hero .pub-btn-primary:hover, .pub-cta .pub-btn-primary:hover, .pub-dark .pub-btn-primary:hover, .pub-footer .pub-btn-primary:hover { background-color: var(--color-brand-50); }
+.pub-btn-ghost { background: rgb(255 255 255 / 0.08); border-color: rgb(255 255 255 / 0.35); }
+
+/* ───────────── 5. Hero / CTA / dark sections: login-style gradient + two soft circles (no aurora, dots, grain) ───────────── */
+.pub-hero, .pub-cta, .pub-dark { background: var(--color-brand-950); }
+.pub-aurora, .pub-aurora-calm { background: var(--pub-grad); }
+.pub-aurora i, .pub-dots, .pub-grain { display: none; }
+.pub-aurora::before, .pub-aurora::after { content: ""; position: absolute; border-radius: 50%; background: rgb(255 255 255 / 0.05); pointer-events: none; }
+.pub-aurora::before { width: 24rem; height: 24rem; right: -6rem; top: -6rem; }
+.pub-aurora::after { width: 28rem; height: 28rem; left: -7rem; bottom: -9rem; }
+@media (min-width: 64rem) { .pub-aurora::before { width: 32rem; height: 32rem; right: -8rem; top: -9rem; } .pub-aurora::after { width: 36rem; height: 36rem; left: -10rem; bottom: -14rem; } }
+.pub-grad { background-image: linear-gradient(100deg, var(--color-brand-200) 0%, #fff 50%, var(--color-brand-200) 100%); }
+.pub-pill { background: rgb(255 255 255 / 0.1); border-color: rgb(255 255 255 / 0.22); color: #fff; }
+.pub-pill svg { color: var(--color-brand-200); }
+.pub-checks svg { color: var(--color-brand-800); background: var(--color-brand-200); }
+.pub-lead { color: rgb(255 255 255 / 0.85); }
+.pub-display { font-weight: 650; }
+.pub-win { box-shadow: 0 40px 80px -24px rgb(2 8 24 / 0.65), 0 0 0 1px rgb(255 255 255 / 0.18); }
+.pub-win-brand span { background: linear-gradient(90deg, var(--color-brand-700) 50%, var(--color-brand-400) 50%); }
+
+/* ───────────── 6. Sections, headings, eyebrow ───────────── */
+.pub-section-tint { background: var(--color-canvas); }
+.pub-eyebrow { display: inline-flex; align-items: center; padding: 0.3rem 0.8rem; border-radius: 999px; background: var(--color-brand-50); box-shadow: inset 0 0 0 1px var(--color-brand-100); color: var(--color-brand-700); letter-spacing: 0.08em; font-size: 0.74rem; }
+.pub-sh-dark .pub-eyebrow, .pub-dark .pub-eyebrow { background: rgb(255 255 255 / 0.1); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.2); color: #fff; }
+.pub-h2 { font-weight: 650; }
+.pub-icontile { border-radius: var(--pub-r-ctl); background: var(--color-brand-50); box-shadow: inset 0 0 0 1px var(--color-brand-100); color: var(--color-brand-700); }
+
+/* ───────────── 7. Cards (same look as the <Card> used in the app and on sign-in) ───────────── */
+.pub-tile, .pub-card, .pub-portal, .pub-status-card { border-radius: var(--pub-r-lg); border-color: var(--color-line); }
+.pub-tile:hover, .pub-card:hover, .pub-portal:hover { border-color: var(--color-brand-200); box-shadow: var(--shadow-hover); transform: translateY(-3px); }
+.pub-tile::before { background: radial-gradient(360px circle at var(--mx, 50%) var(--my, 0%), rgb(12 131 235 / 0.07), transparent 65%); }
+.pub-status-card { box-shadow: var(--shadow-card); }
+.pub-details { border-radius: var(--pub-r-md); }
+.pub-details summary { border-radius: var(--pub-r-md); }
+.pub-details[open] { border-color: var(--color-brand-300); box-shadow: var(--shadow-hover); }
+.pub-faq-end, .pub-legend, .pub-note { border-radius: var(--pub-r-md); }
+.pub-input { border-radius: var(--radius-control); }
+.pub-input:focus { box-shadow: 0 0 0 3px rgb(12 131 235 / 0.18); }
+.pub-step-body .pub-step-who { color: var(--color-brand-700); }
+.pub-flow-line i { background: linear-gradient(180deg, var(--color-brand-500), var(--color-brand-300)); }
+.pub-art-gst .wide { background: var(--color-brand-100); }
+.pub-fill.pub-ok { background: linear-gradient(90deg, var(--color-success-500), var(--color-success-600)); }
+.pub-art-flo span, .pub-art-saf span, .pub-art-iso span, .pub-art-erp > span, .pub-art-por span { border-radius: 999px; }
+
+/* ───────────── 8. "One ledger" dark block + Admin portal card ───────────── */
+.pub-before, .pub-after { border-radius: var(--pub-r-lg); }
+.pub-after { border-color: rgb(185 220 254 / 0.45); background: linear-gradient(160deg, rgb(185 220 254 / 0.12), rgb(12 131 235 / 0.12)); box-shadow: 0 0 80px -24px rgb(54 160 250 / 0.5); }
+.pub-hub-line { stroke: rgb(185 220 254 / 0.6); }
+.pub-hub-halo { fill: rgb(185 220 254 / 0.08); stroke: rgb(185 220 254 / 0.4); }
+.pub-hub-core { fill: var(--color-brand-800); stroke: var(--color-brand-200); }
+.pub-hub-node rect { fill: var(--color-brand-900); }
+.pub-before li svg { color: #fecaca; }
+.pub-portal-admin { background: var(--pub-grad); box-shadow: 0 24px 50px -24px rgb(7 39 73 / 0.7); }
+.pub-portal-admin .pub-icontile { background: rgb(255 255 255 / 0.12); color: #fff; box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.22); }
+.pub-portal-admin li svg { color: var(--color-brand-200); }
+
+/* ───────────── 9. Footer ───────────── */
+.pub-footer { background: var(--color-brand-950); }
+.pub-footer-glow { background: radial-gradient(closest-side, rgb(12 131 235 / 0.28), transparent); }
+.pub-totop { border-radius: var(--pub-r-ctl); }
