@@ -16,7 +16,8 @@ export default function Seo({ route }) {
     setMeta("name", "description", h.description);
     setMeta("name", "robots", h.robots);
     for (const [k, v] of Object.entries(h.og)) setMeta(k.startsWith("twitter:") ? "name" : "property", k, v);
-    ["og:url"].forEach((k) => { if (!h.og[k]) setMeta("property", k, ""); });
+    ["og:url", "og:image", "og:image:width", "og:image:height", "og:image:alt"].forEach((k) => { if (!h.og[k]) setMeta("property", k, ""); });
+    ["twitter:image", "twitter:image:alt"].forEach((k) => { if (!h.og[k]) setMeta("name", k, ""); });
     let link = document.head.querySelector('link[rel="canonical"]');
     if (h.canonical) { if (!link) { link = document.createElement("link"); link.rel = "canonical"; document.head.appendChild(link); } link.href = h.canonical; } else if (link) link.remove();
     document.head.querySelectorAll('script[type="application/ld+json"]').forEach((s) => s.remove());

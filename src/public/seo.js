@@ -1,32 +1,49 @@
 // Pure SEO helpers shared by the browser (Seo component), the prerender script and the tests. No DOM access here.
 import { SITE, SITEMAP_ROUTES, isPrivatePath } from "./siteConfig.js";
+import { FAQS } from "./content.js";
 
 export const canonicalUrl = (path, origin = SITE.origin) => (origin ? `${origin}${path === "/" ? "/" : path}` : "");
 
-/** Structured data — only types the site can honestly support, and only when the production origin is known. */
+/** Structured data uses only product facts present in the application. No ratings, offers, certifications or customer counts are invented. */
 export function jsonLdFor(route, origin = SITE.origin, site = SITE) {
-  if (!origin || route.path !== "/" || !route.indexable) return [];
-  const org = { "@context": "https://schema.org", "@type": "Organization", name: site.legalName || site.name, url: `${origin}/` };
-  if (site.contactEmail) org.email = site.contactEmail;
-  return [
-    org,
-    { "@context": "https://schema.org", "@type": "WebSite", name: site.name, url: `${origin}/` },
-    { "@context": "https://schema.org", "@type": "SoftwareApplication", name: site.name, applicationCategory: "BusinessApplication", operatingSystem: "Web browser", description: route.description, url: `${origin}/` },
+  if (!origin || !route.indexable) return [];
+  const graph = [
+    { "@context": "https://schema.org", "@type": "WebPage", name: route.title, description: route.description, url: `${origin}${route.path === "/" ? "/" : route.path}`, isPartOf: { "@type": "WebSite", name: site.name, url: `${origin}/` } },
   ];
+  if (route.path === "/") {
+    graph.push(
+      { "@context": "https://schema.org", "@type": "WebSite", name: site.name, url: `${origin}/`, description: site.tagline },
+      { "@context": "https://schema.org", "@type": "SoftwareApplication", name: site.name, applicationCategory: "BusinessApplication", operatingSystem: "Web browser", description: route.description, url: `${origin}/` },
+    );
+    if (site.legalName) {
+      const org = { "@context": "https://schema.org", "@type": "Organization", name: site.legalName, url: `${origin}/` };
+      if (site.contactEmail) org.email = site.contactEmail;
+      if (site.address) org.address = { "@type": "PostalAddress", streetAddress: site.address };
+      graph.push(org);
+    }
+  }
+  if (route.path === "/faq") {
+    graph.push({ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: FAQS.map((item) => ({ "@type": "Question", name: item.q, acceptedAnswer: { "@type": "Answer", text: item.a } })) });
+  }
+  return graph;
 }
 
 /** Everything that belongs in <head> for a route. */
 export function headFor(route, origin = SITE.origin, site = SITE) {
   const canonical = route.indexable ? canonicalUrl(route.path, origin) : "";
+  const image = origin ? `${origin}/og/e-pulse-social.png` : "";
   return {
     title: route.title,
     description: route.description,
-    robots: route.indexable ? "index,follow" : "noindex,follow",
+    robots: route.indexable ? "index,follow,max-image-preview:large" : "noindex,nofollow",
     canonical,
     og: {
       "og:type": "website", "og:site_name": site.name, "og:title": route.title, "og:description": route.description,
+      "og:locale": "en_US",
       ...(canonical ? { "og:url": canonical } : {}),
-      "twitter:card": "summary", "twitter:title": route.title, "twitter:description": route.description,
+      ...(image && route.indexable ? { "og:image": image, "og:image:width": "1200", "og:image:height": "630", "og:image:alt": "e-Pulse pharmaceutical distributor management software" } : {}),
+      "twitter:card": image && route.indexable ? "summary_large_image" : "summary", "twitter:title": route.title, "twitter:description": route.description,
+      ...(image && route.indexable ? { "twitter:image": image, "twitter:image:alt": "e-Pulse pharmaceutical distributor management software" } : {}),
     },
     jsonLd: jsonLdFor(route, origin, site),
   };
@@ -39,9 +56,8 @@ export function buildSitemap(routes = SITEMAP_ROUTES(), origin = SITE.origin) {
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
 }
 
-import { PRIVATE_PREFIXES } from "./siteConfig.js";
 export function buildRobots(origin = SITE.origin) {
-  const lines = ["# Private application areas must never be indexed.", "User-agent: *", ...PRIVATE_PREFIXES.map((p) => `Disallow: ${p}`), "Disallow: /api/", ""];
+  const lines = ["# Private pages are crawlable only so search engines can read their noindex directives.", "User-agent: *", "Disallow: /api/", ""];
   if (origin) lines.push(`Sitemap: ${origin}/sitemap.xml`, "");
   else lines.push("# Sitemap line is added at build time once VITE_SITE_URL (the production domain) is configured.", "");
   return lines.join("\n");

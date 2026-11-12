@@ -13,13 +13,14 @@ const origin = clean(env.VITE_SITE_URL).replace(/\/+$/, "");
 
 export const SITE = {
   name: "e-Pulse",
-  tagline: "Distributor management for pharmaceutical supply chains",
+  tagline: "Pharmaceutical distributor management software for inventory, expiry, sales and accounts",
   origin: /^https?:\/\/[^\s/]+$/i.test(origin) ? origin : "", // "" = production domain not configured
   legalName: clean(env.VITE_COMPANY_LEGAL_NAME),
   contactEmail: clean(env.VITE_CONTACT_EMAIL),
   // Phase 24: defaults to the backend endpoint POST <API base>/public/contact. "off" disables it (mailto / not-configured notice instead).
   contactEndpoint: clean(env.VITE_CONTACT_ENDPOINT).toLowerCase() === "off" ? "" : clean(env.VITE_CONTACT_ENDPOINT) || `${API_BASE_URL}/public/contact`,
   address: clean(env.VITE_COMPANY_ADDRESS),
+  socialImage: `${origin}/og/e-pulse-social.png`,
 };
 
 /** Paths that are part of the private application. Never prerendered, never in the sitemap, always noindex. */
@@ -28,13 +29,13 @@ export const isPrivatePath = (p) => PRIVATE_PREFIXES.some((x) => p === x || p.st
 
 // indexable:false → rendered, but noindex and left out of the sitemap (legal drafts until they are reviewed).
 export const PUBLIC_ROUTES = [
-  { path: "/", id: "home", nav: "Home", title: "e-Pulse — Pharmaceutical Distributor Management System", description: "Manage batch-wise inventory, expiry, sales, purchasing, accounts and reporting for pharmaceutical distribution in one web application.", indexable: true },
-  { path: "/features", id: "features", nav: "Features", title: "Features — e-Pulse", description: "Batch and expiry-aware inventory, FEFO allocation, sales and purchase documents, returns, accounts and Admin oversight in e-Pulse.", indexable: true },
-  { path: "/modules", id: "modules", nav: "Modules", title: "Modules — e-Pulse", description: "Inventory, sales, purchasing, returns, accounts, retailers, schemes, claims and ERP integration modules, with their current implementation status.", indexable: true },
-  { path: "/solutions", id: "solutions", nav: "Solutions", title: "Solutions and Use Cases — e-Pulse", description: "How pharmaceutical distributors use e-Pulse for stock control, expiry management, order-to-cash, procure-to-pay and head-office oversight.", indexable: true },
-  { path: "/about", id: "about", nav: "About", title: "About — e-Pulse", description: "What e-Pulse is, who it is built for and how it is structured: a Distributor portal, an Admin portal and an optional ERP integration layer.", indexable: true },
-  { path: "/faq", id: "faq", nav: "FAQ", title: "Frequently Asked Questions — e-Pulse", description: "Answers about e-Pulse: batch and expiry handling, FEFO, portals, ERP and SAP integration status, security and data isolation.", indexable: true },
-  { path: "/contact", id: "contact", nav: "Contact", title: "Contact — e-Pulse", description: "Get in touch about e-Pulse. Send an enquiry about a demo, deployment or integration question.", indexable: true },
+  { path: "/", id: "home", nav: "Home", title: "Pharmaceutical Distributor Management Software | e-Pulse", description: "Manage pharmaceutical distribution with batch-wise inventory, FEFO expiry control, purchasing, sales, returns and accounts in one connected web application.", indexable: true },
+  { path: "/features", id: "features", nav: "Features", title: "Pharma Distribution Software Features | e-Pulse", description: "Explore e-Pulse features for pharmaceutical distributors: batch inventory, FEFO allocation, expiry monitoring, sales, purchasing, returns and financial accounts.", indexable: true },
+  { path: "/modules", id: "modules", nav: "Modules", title: "Pharmaceutical Distribution Management Modules | e-Pulse", description: "Review e-Pulse modules for pharmaceutical distribution, including inventory, batch and expiry control, sales, purchasing, accounts, schemes and ERP connectivity.", indexable: true },
+  { path: "/solutions", id: "solutions", nav: "Solutions", title: "Pharmaceutical Distribution Workflows & Solutions | e-Pulse", description: "See how e-Pulse supports pharmaceutical stock control, expiry management, order-to-cash, procure-to-pay and multi-distributor head-office oversight.", indexable: true },
+  { path: "/about", id: "about", nav: "About", title: "About e-Pulse Pharmaceutical Distribution Software", description: "Learn about e-Pulse, software for pharmaceutical distributors, with separate Distributor and Admin portals and an optional ERP integration layer.", indexable: true },
+  { path: "/faq", id: "faq", nav: "FAQ", title: "Pharma Distributor Software FAQs | e-Pulse", description: "Get answers about pharmaceutical batch tracking, FEFO expiry management, distributor portals, ERP and SAP integration, data isolation and e-Pulse demos.", indexable: true },
+  { path: "/contact", id: "contact", nav: "Contact", title: "Request a Pharma Software Demo | Contact e-Pulse", description: "Contact the e-Pulse team to discuss pharmaceutical distribution workflows, a product demonstration, deployment questions or ERP integration.", indexable: true },
   { path: "/privacy", id: "privacy", nav: "", title: "Privacy Policy — e-Pulse", description: "Privacy policy template for e-Pulse. Draft text pending legal review.", indexable: false },
   { path: "/terms", id: "terms", nav: "", title: "Terms of Use — e-Pulse", description: "Terms of use template for e-Pulse. Draft text pending legal review.", indexable: false },
 ];

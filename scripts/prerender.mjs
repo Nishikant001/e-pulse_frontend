@@ -27,8 +27,11 @@ for (const route of PUBLIC_ROUTES) {
   fs.writeFileSync(out, html);
   console.log(`prerendered ${route.path}`);
 }
-// The private/unknown-URL fallback shell stays noindex; keep a copy for servers that need an explicit fallback file.
+// Private routes use this noindex shell; configure the web server to serve it only for known private prefixes.
 fs.writeFileSync(path.join(root, "dist", "app-shell.html"), shell);
+// A real prerendered 404 document for the web server error_page handler.
+const notFound = { path: "/404", id: "not-found", title: "Page not found — e-Pulse", description: "The page you requested does not exist.", indexable: false };
+fs.writeFileSync(path.join(root, "dist", "404.html"), applyHead(shell, headFor(notFound), render("/this-page-does-not-exist")));
 fs.writeFileSync(path.join(root, "dist", "robots.txt"), buildRobots(SITE.origin));
 const sm = buildSitemap();
 if (sm) { fs.writeFileSync(path.join(root, "dist", "sitemap.xml"), sm); console.log("sitemap.xml written"); }
