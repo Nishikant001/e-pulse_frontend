@@ -1,0 +1,1 @@
+import{u as o,r,A as a}from"./index-BEKakvfd.js";const n=()=>{const e=o();return r.useEffect(()=>{(async()=>{try{await fetch(`${a}/logout`,{method:"POST",credentials:"include"})}catch(t){console.error("Logout error",t)}finally{localStorage.clear(),e("/",{replace:!0})}})()},[e]),null};export{n as default};

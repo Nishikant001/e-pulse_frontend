@@ -1,0 +1,11 @@
+# Private application areas must never be indexed.
+User-agent: *
+Disallow: /dashboard
+Disallow: /admin
+Disallow: /login
+Disallow: /signup
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /api/
+
+Sitemap: https://epulse.excelligent.co.in/sitemap.xml
