@@ -7,9 +7,7 @@ import Card from "../../components/ui/Card";
 import ErrorState from "../../components/ui/ErrorState";
 import IconButton from "../../components/ui/IconButton";
 import PageHeader from "../../components/ui/PageHeader";
-import Tabs from "../../components/ui/Tabs";
 import { useDateRange } from "../../components/layout/dateRangeContext";
-import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { formatRange, rangeFromPreset } from "../../utils/dateRanges";
 import { useAdminSession } from "../adminAuth/adminSessionContext";
 import { DATA_SOURCES } from "./adminDashboardService";
@@ -25,11 +23,6 @@ import StockMovementCard from "./components/StockMovementCard";
 import TopDistributorsCard from "./components/TopDistributorsCard";
 import TopProductsCard from "./components/TopProductsCard";
 
-const SOURCE_TABS = [
-  { id: DATA_SOURCES.LIVE, label: "Live data" },
-  { id: DATA_SOURCES.SAMPLE, label: "Sample data" },
-];
-
 function errorMessage(error) {
   if (error?.status === 503) return "The Admin portal is not configured on this server.";
   if (error?.status === 0) return "The server could not be reached. Check your connection and try again.";
@@ -38,22 +31,19 @@ function errorMessage(error) {
 
 /**
  * AdminDashboardPage — management-level e-Pulse dashboard for /admin/dashboard.
- * Built entirely from the Phase 2 design system; data comes from the feature's service layer
- * (live API or clearly labelled sample data). The date range comes from the shell header (useDateRange).
+ * Production mode: reads only from the authenticated live API. Empty database results remain empty.
  */
 export default function AdminDashboardPage() {
   const navigate = useNavigate();
   const { range } = useDateRange();
   const { expire, admin } = useAdminSession();
-  const [source, setSource] = useLocalStorage("dms.admin.dashboard.source", DATA_SOURCES.LIVE);
+  const source = DATA_SOURCES.LIVE;
 
   // "Clear" in the header picker leaves the range empty — fall back to This month instead of an invalid request.
   const effective = range.from && range.to ? range : rangeFromPreset("month");
   const { status, data, error, reload } = useAdminDashboard({ source, from: effective.from, to: effective.to, onUnauthorized: expire });
   const loading = status === "loading";
-  const sample = source === DATA_SOURCES.SAMPLE;
-
-  const noSales = !loading && data && !sample && data.kpis.totalSecondarySales.value === 0 && data.distributors.length === 0 && !data.salesTrend.hasData;
+  const noSales = !loading && data && data.kpis.totalSecondarySales.value === 0 && data.distributors.length === 0 && !data.salesTrend.hasData;
 
   return (
     <div>
@@ -71,31 +61,22 @@ export default function AdminDashboardPage() {
         description="Network-wide view of secondary sales, distributors, inventory and expiry risk."
         meta={
           <>
-            <Badge tone="brand">{sample ? "Sample period · last 30 days" : formatRange(effective) || "Select dates"}</Badge>
-            {!sample && data ? <span className="text-caption text-ink-subtle">compared with {formatRange(data.meta.previousRange)}</span> : null}
+            <Badge tone="brand">{formatRange(effective) || "Select dates"}</Badge>
+            {data ? <span className="text-caption text-ink-subtle">compared with {formatRange(data.meta.previousRange)}</span> : null}
           </>
         }
         actions={
-          <>
-            <Tabs variant="pills" tabs={SOURCE_TABS} value={source} onChange={setSource} />
-            <IconButton icon={RefreshCw} label="Refresh dashboard" variant="outline" onClick={reload} disabled={loading} />
-          </>
+          <IconButton icon={RefreshCw} label="Refresh dashboard" variant="outline" onClick={reload} disabled={loading} />
         }
       />
 
-      {sample ? (
-        <Alert tone="info" title="Sample data" className="mb-6">
-          You are viewing a fixed illustration built from sample data. It does not read your database and ignores the selected date range. Switch to “Live data” to see real figures.
-        </Alert>
-      ) : (
-        <p className="-mt-3 mb-6 max-w-3xl text-caption text-ink-subtle">
-          Sales, orders, distributors, categories, top products and stock movement follow the selected dates. Inventory, near-expiry, outstanding, alerts and activity show the current position.
-        </p>
-      )}
+      <p className="-mt-3 mb-6 max-w-3xl text-caption text-ink-subtle">
+        Sales, orders, distributors, categories, top products and stock movement follow the selected dates. Inventory, near-expiry, outstanding, alerts and activity show the current position.
+      </p>
 
       {noSales ? (
         <Alert tone="info" title="No sales recorded in this period" className="mb-6">
-          There are no posted invoices between these dates. Try a wider date range, or switch to “Sample data” to preview the layout.
+          There are no posted invoices between these dates. Try a wider date range or add live transactions.
         </Alert>
       ) : null}
 

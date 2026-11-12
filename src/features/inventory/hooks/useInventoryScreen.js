@@ -12,8 +12,7 @@ export function useInventoryScreen(portal) {
   const [source, setSource] = useDataSource();
   const adminSession = useContext(AdminSessionContext); // null outside the Admin portal
   const isAdmin = portal === "admin";
-  const effectiveSource = isAdmin ? source : "live";
-  const api = useMemo(() => inventoryApi(portal, effectiveSource), [portal, effectiveSource]);
+  const api = useMemo(() => inventoryApi(portal), [portal]);
   const [lookups, setLookups] = useState(null);
 
   useEffect(() => {
@@ -25,7 +24,7 @@ export function useInventoryScreen(portal) {
     return () => controller.abort();
   }, [api]);
 
-  return { portal, isAdmin, source, setSource, api, lookups, expire: adminSession?.expire, isSample: isAdmin && source === "sample" };
+  return { portal, isAdmin, source, setSource, api, lookups, expire: adminSession?.expire, isSample: false };
 }
 
 export const inventoryBase = (portal) => (portal === "admin" ? "/admin/inventory" : "/dashboard/inventory");

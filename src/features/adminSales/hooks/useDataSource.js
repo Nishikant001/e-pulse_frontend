@@ -1,7 +1,4 @@
-import { useLocalStorage } from "../../../hooks/useLocalStorage";
-
-// Live / Sample switch shared by every Admin screen that has sample data (the key is the Phase 3 dashboard's key,
-// so the choice is remembered across the dashboard and the Sales screens).
+// Production mode: operational screens always read live server data. The setter is a no-op for compatibility.
 export function useDataSource() {
-  return useLocalStorage("dms.admin.dashboard.source", "live");
+  return ["live", () => {}];
 }

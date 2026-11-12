@@ -11,7 +11,6 @@ const MODULE_ICON = { "Sales Orders": ShoppingCart, "Sales Invoices": FileText, 
  * Live: the latest sales orders / invoices / returns. It is NOT an audit log (Audit Logs arrive in a later phase).
  */
 export default function ActivityPanel({ data, loading, onRetry }) {
-  const sample = data?.source === "sample";
   const items = (data?.activity || []).map((a) => ({
     id: a.id,
     title: a.action,
@@ -34,7 +33,7 @@ export default function ActivityPanel({ data, loading, onRetry }) {
     <ActivityCard
       className="min-w-0"
       title="Recent Activity"
-      subtitle={sample ? "Sample data" : "Latest sales orders, invoices and returns across distributors"}
+      subtitle="Latest sales orders, invoices and returns across distributors"
       items={items}
       loading={loading || !data}
       onRetry={onRetry}

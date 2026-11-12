@@ -5,8 +5,8 @@ import { Building2, CreditCard, LayoutDashboard, Megaphone, ScrollText, Settings
  *
  * A Super Admin runs the platform — admin accounts, the distributor network, plans and audit — not the day-to-day Sales / Inventory /
  * Masters / Accounts modules, so those groups are deliberately absent here (adminNavigation.js still serves every other admin role).
- * Live:   Dashboard shell, Admins & Users (GET /api/admin/superadmin/overview).
- * Design previews on sample data (features/superAdmin/demoData.js): everything else.
+ * Live: Dashboard, Admins & Users, role definitions, distributor network and pending onboarding records.
+ * Sections without a persistent backend API intentionally render empty states rather than fabricated records.
  */
 export const superAdminNavigation = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, to: "/admin/dashboard", end: true },

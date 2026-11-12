@@ -113,7 +113,7 @@ function PrivateApp() {
           <Route element={<AdminGuard />}>
             <Route index element={<Navigate to="/admin/dashboard" replace />} />
             <Route path="dashboard" element={<AdminHomeRoute />} />
-            {/* Super Admin portal screens (role-gated in the UI; the API enforces SUPER_ADMIN). Only "Admins & Users" is live — the rest are sample-data previews. */}
+            {/* Super Admin portal screens: live server-backed views where APIs exist; unsupported sections show honest empty states. */}
             <Route path="super-admin" element={<RequireSuperAdmin />}>
               <Route index element={<SuperAdminDashboardPage />} />
               <Route path="roles" element={<RolesPermissionsPage />} />

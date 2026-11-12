@@ -1,7 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { ExternalLink, Building2, CircleCheck, Clock, Ban, ShieldCheck, ShieldAlert, UserCheck, Users, RefreshCw } from "lucide-react";
+import { ExternalLink, Building2, CircleCheck, Clock, Ban, ShieldCheck, ShieldAlert, Users, RefreshCw, UserPlus } from "lucide-react";
 import Badge from "../../../components/ui/Badge";
+import Button from "../../../components/ui/Button";
+import Input from "../../../components/ui/Input";
+import Modal from "../../../components/ui/Modal";
+import Select from "../../../components/ui/Select";
+import { useToast } from "../../../components/feedback";
 import Card from "../../../components/ui/Card";
 import Drawer from "../../../components/ui/Drawer";
 import EmptyState from "../../../components/ui/EmptyState";
@@ -81,6 +86,11 @@ function AdminDistributorsPanel({ admin }) {
 export default function SuperAdminDashboardPage() {
   const [state, setState] = useState({ status: "loading", data: null, error: null });
   const [selected, setSelected] = useState(null);
+  const [createOpen, setCreateOpen] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [formError, setFormError] = useState("");
+  const [form, setForm] = useState({ name: "", email: "", password: "", role: "ERP_ADMIN" });
+  const toast = useToast();
 
   const load = useCallback((signal) => {
     setState((s) => ({ ...s, status: "loading", error: null }));
@@ -133,11 +143,38 @@ export default function SuperAdminDashboardPage() {
     [],
   );
 
+  const closeCreate = () => {
+    setCreateOpen(false);
+    setFormError("");
+    setForm({ name: "", email: "", password: "", role: "ERP_ADMIN" });
+  };
+
+  const submitCreate = async (event) => {
+    event.preventDefault();
+    setFormError("");
+    setCreating(true);
+    try {
+      await superAdminApi.createAdmin(form);
+      toast.success("Admin account created successfully.");
+      closeCreate();
+      load();
+    } catch (error) {
+      setFormError(error?.message || "Unable to create the admin account.");
+    } finally {
+      setCreating(false);
+    }
+  };
+
   const header = (
     <PageHeader
       title="Admins & Users"
-      description="Every admin account and how many distributors each one has onboarded, with network-wide totals. Distributors that signed up themselves, or existed before tracking began, are shown as unassigned."
-      actions={<IconButton icon={RefreshCw} label="Refresh overview" variant="outline" onClick={() => load()} disabled={state.status === "loading"} />}
+      description="Manage admin accounts and see the distributors each admin has onboarded. Distributor self-signups and older records remain unassigned."
+      actions={
+        <div className="flex flex-wrap items-center gap-2">
+          <Button leftIcon={UserPlus} onClick={() => setCreateOpen(true)}>Create admin</Button>
+          <IconButton icon={RefreshCw} label="Refresh overview" variant="outline" onClick={() => load()} disabled={state.status === "loading"} />
+        </div>
+      }
     />
   );
 
@@ -196,6 +233,38 @@ export default function SuperAdminDashboardPage() {
       >
         {selected ? <AdminDistributorsPanel admin={selected} /> : null}
       </Drawer>
+
+      <Modal
+        open={createOpen}
+        onClose={closeCreate}
+        title="Create admin account"
+        description="The new account can sign in to the Admin portal immediately."
+        footer={
+          <>
+            <Button variant="secondary" onClick={closeCreate} disabled={creating}>Cancel</Button>
+            <Button type="submit" form="create-admin-form" loading={creating}>Create admin</Button>
+          </>
+        }
+      >
+        <form id="create-admin-form" onSubmit={submitCreate} className="space-y-4">
+          <Input label="Full name" value={form.name} onChange={(e) => setForm((v) => ({ ...v, name: e.target.value }))} maxLength={120} required autoComplete="name" />
+          <Input label="Email address" type="email" value={form.email} onChange={(e) => setForm((v) => ({ ...v, email: e.target.value }))} maxLength={190} required autoComplete="email" />
+          <Input label="Temporary password" type="password" hint="At least 12 characters. Share it securely with the new admin." value={form.password} onChange={(e) => setForm((v) => ({ ...v, password: e.target.value }))} minLength={12} maxLength={256} required autoComplete="new-password" />
+          <Select
+            label="Admin role"
+            value={form.role}
+            onChange={(e) => setForm((v) => ({ ...v, role: e.target.value }))}
+            options={[
+              { value: "ERP_ADMIN", label: "ERP Admin — all ERP permissions" },
+              { value: "ERP_OPERATOR", label: "ERP Operator — view, sync and retry" },
+              { value: "ERP_VIEWER", label: "ERP Viewer — read-only ERP access" },
+              { value: "ADMIN", label: "Admin — legacy full ERP access" },
+              { value: "SUPER_ADMIN", label: "Super Admin — platform administration" },
+            ]}
+          />
+          {formError ? <p role="alert" className="text-sm text-error-700">{formError}</p> : null}
+        </form>
+      </Modal>
     </div>
   );
 }

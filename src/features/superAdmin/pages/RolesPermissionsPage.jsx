@@ -1,78 +1,34 @@
-import { useState } from "react";
-import { Check, Eye, Lock, Minus, Pencil, Plus, ShieldCheck } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { ShieldCheck } from "lucide-react";
 import Badge from "../../../components/ui/Badge";
-import Button from "../../../components/ui/Button";
 import Card from "../../../components/ui/Card";
-import Drawer from "../../../components/ui/Drawer";
+import EmptyState from "../../../components/ui/EmptyState";
+import ErrorState from "../../../components/ui/ErrorState";
 import PageHeader from "../../../components/ui/PageHeader";
-import { useToast } from "../../../components/feedback";
 import DataTable from "../../../components/tables/DataTable";
-import DetailTable from "../../adminSales/components/DetailTable";
-import { formatNumber } from "../../../utils/format";
-import DemoNotice from "../components/DemoNotice";
-import { PERMISSION_MODULES, ROLE_ACCESS, ROLES } from "../demoData";
+import { superAdminApi } from "../api/superAdminApi";
 
-const ACCESS = {
-  full: { label: "Full access", tone: "success", icon: Check },
-  edit: { label: "View & edit", tone: "info", icon: Pencil },
-  view: { label: "View only", tone: "neutral", icon: Eye },
-  none: { label: "No access", tone: "neutral", icon: Minus },
-};
-
-/** Super Admin → Roles & Permissions (sample data). */
 export default function RolesPermissionsPage() {
-  const toast = useToast();
-  const [selected, setSelected] = useState(null);
-
+  const [state, setState] = useState({ status: "loading", data: null, error: null });
+  const load = useCallback((signal) => {
+    setState((s) => ({ ...s, status: "loading", error: null }));
+    superAdminApi.roles(signal)
+      .then((data) => setState({ status: "ready", data, error: null }))
+      .catch((error) => { if (error?.name !== "AbortError") setState({ status: "error", data: null, error }); });
+  }, []);
+  useEffect(() => { const c = new AbortController(); load(c.signal); return () => c.abort(); }, [load]);
   const columns = [
-    {
-      key: "name", header: "Role", sortable: true, accessor: (r) => r.name,
-      render: (v, r) => (
-        <button type="button" onClick={() => setSelected(r)} className="flex items-center gap-2 font-medium text-brand-700 underline-offset-2 hover:underline">
-          {v}
-          {r.system ? <Lock className="size-3.5 text-ink-subtle" aria-label="System role" /> : null}
-        </button>
-      ),
-    },
-    { key: "description", header: "Description", accessor: (r) => r.description },
-    { key: "users", header: "Users", sortable: true, align: "right", accessor: (r) => r.users, render: (v) => <span className="tabular-nums">{formatNumber(v)}</span> },
-    { key: "type", header: "Type", accessor: (r) => (r.system ? "System" : "Custom"), render: (v) => <Badge tone={v === "System" ? "brand" : "neutral"}>{v}</Badge> },
+    { key: "name", header: "Role", render: (v) => <span className="font-medium">{v}</span> },
+    { key: "permissions", header: "ERP permissions", render: (v) => v?.length ? <div className="flex flex-wrap gap-1">{v.map((p) => <Badge key={p} tone="info">{p}</Badge>)}</div> : "No ERP permissions" },
   ];
-
-  const matrixRows = selected ? PERMISSION_MODULES.map((m, i) => ({ id: m, module: m, level: ROLE_ACCESS[selected.id][i] })) : [];
-  const matrixColumns = [
-    { key: "module", header: "Module", render: (r) => <span className="font-medium">{r.module}</span> },
-    {
-      key: "level", header: "Access",
-      render: (r) => {
-        const a = ACCESS[r.level];
-        return <Badge tone={a.tone} icon={a.icon}>{a.label}</Badge>;
-      },
-    },
-  ];
-
   return (
     <div>
-      <PageHeader
-        title="Roles & Permissions"
-        description="Control what each kind of admin account can see and change."
-        actions={<Button leftIcon={Plus} onClick={() => toast.info("Creating custom roles is not available in this preview.")}>New role</Button>}
-      />
-      <DemoNotice />
+      <PageHeader title="Roles & Permissions" description="Live role definitions from the backend. These roles currently govern ERP integration permissions only; they do not yet provide per-module access control across the entire Admin portal." />
       <Card>
-        <DataTable bare rowKey="id" caption="Roles" columns={columns} data={ROLES} searchable searchPlaceholder="Search roles" searchKeys={["name", "description"]} onRowClick={setSelected} responsive="cards" cardTitleKey="name" emptyIcon={ShieldCheck} emptyTitle="No roles found" />
+        {state.status === "error" ? <ErrorState title="Unable to load roles" message={state.error?.message || "Please try again."} onRetry={() => load()} /> :
+          <DataTable bare rowKey="id" caption="Configured ERP roles" columns={columns} data={state.data?.roles || []} loading={state.status === "loading"} emptyIcon={ShieldCheck} emptyTitle="No roles configured" emptyDescription="No role definitions were returned by the server." />}
       </Card>
-
-      <Drawer
-        open={Boolean(selected)}
-        onClose={() => setSelected(null)}
-        size="md"
-        title={selected ? selected.name : ""}
-        description={selected ? `${selected.description} ${selected.system ? "System roles cannot be edited." : ""}` : undefined}
-        footer={selected ? <Button variant="secondary" disabled={selected.system} onClick={() => toast.info("Editing permissions is not available in this preview.")}>Edit permissions</Button> : undefined}
-      >
-        {selected ? <DetailTable caption={`${selected.name} permissions`} columns={matrixColumns} rows={matrixRows} /> : null}
-      </Drawer>
+      <p className="mt-3 text-sm text-ink-muted">Role assignments are selected when creating an admin account. Custom module-level permissions are not implemented in the current backend.</p>
     </div>
   );
 }

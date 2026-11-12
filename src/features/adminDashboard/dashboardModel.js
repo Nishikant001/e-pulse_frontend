@@ -1,8 +1,7 @@
 // View-model helpers for the Admin dashboard. Pure functions — no React, no network.
 //
-// Both data sources (live API and sample data) produce the SAME raw shape (see the contract in
-// docs/PHARMA_DMS_ADMIN_DASHBOARD.md §8 and backend/services/adminDashboard.service.js), and both pass through
-// normalizeDashboard(), so every component reads one shape regardless of where the numbers came from.
+// The authenticated live API produces the raw shape (see docs/PHARMA_DMS_ADMIN_DASHBOARD.md §8
+// and backend/services/adminDashboard.service.js). normalizeDashboard() gives components one stable view-model.
 
 const shortFmt = new Intl.DateTimeFormat("en-IN", { day: "2-digit", month: "short" });
 
@@ -50,7 +49,7 @@ export function normalizeDashboard(raw, { source }) {
   const nearValue = raw.nearExpiry?.totals?.value || 0;
 
   return {
-    source, // "live" | "sample"
+    source, // "live"
     meta: { ...raw.meta, rangeApplied: source === "live" },
     kpis: raw.kpis,
     salesTrend: { granularityDays: raw.salesTrend?.granularityDays || 1, points: trendPoints, hasData: trendPoints.some((p) => p.current > 0 || p.previous > 0) },
